@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/styles.css" /> <!-- This only works if its `http.ServeFile`d inside go web server! -->
+</head>
+<body>
+    <div class="faq-container">
+        <h1>{{ .Title }}</h1>
+        <hr />
+        {{ range .Questions }}
+            <div class="question" {{ if .CustomStyle }}style="{{.CustomStyle}}"{{end}} onclick="toggleAnswer(this)">
+                {{ .Text }}
+            </div>
+            <div class="answer">
+                {{ .Answer }}
+                {{ if eq .Answer "" }}
+                    Not Answered Yet!
+                {{ end }}
+            </div>
+        {{ end }}
+    </div>
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            if (answer.classList.contains("open")) {
+                answer.classList.remove("open");
+            } else {
+                document.querySelectorAll(".answer.open").forEach(a => a.classList.remove("open"));
+                answer.classList.add("open");
+            }
+        }
+    </script>
+</body>
+</html>
